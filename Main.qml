@@ -1,28 +1,33 @@
 import QtQuick
 import QtQuick.Controls.Basic
+import QtQuick.Layouts
 
 Window {
+    id: window
     width: 300
     height: 400
     visible: true
     title: qsTr("Pomodoro Timer")
 
-    component TimeSelector: Row {
+    component TimeSelector: RowLayout  {
         id: timeSelector
-        spacing: 50
+        spacing: 20
+        Layout.maximumWidth: 300
+
         property alias text: label.text
 
         Text {
             id: label
             font.pointSize: 10
-            anchors.verticalCenter: parent.verticalCenter
+            Layout.alignment: Qt.AlignVCenter
         }
-
+        Item { Layout.fillWidth: true } // spacer
         SpinBox {
             value: 25
             to: 240
             editable: true
             font.pointSize: 10
+            Layout.alignment: Qt.AlignVCenter
 
             property string suffix: " m"
             textFromValue: value => value + suffix
@@ -30,7 +35,10 @@ Window {
         }
     }
 
-    Column {
+    ColumnLayout  {
+        anchors.fill: parent
+        anchors.margins: 20
+
         TimeSelector {
             text: qsTr("Focus")
         }
@@ -40,7 +48,5 @@ Window {
         TimeSelector {
             text: qsTr("Long Break")
         }
-
-        anchors.horizontalCenter: parent.horizontalCenter
     }
 }
