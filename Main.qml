@@ -3,10 +3,14 @@ import QtQuick.Controls.Basic
 import QtQuick.Layouts
 
 Window {
-    id: window
-    width: 300
-    height: 400
     visible: true
+    width: 300
+    height: 200
+    maximumHeight: height
+    maximumWidth: width
+    minimumHeight: height
+    minimumWidth: width
+
     title: qsTr("Pomodoro Timer")
 
     component TimeSelector: RowLayout  {
@@ -27,9 +31,10 @@ Window {
             to: 240
             editable: true
             font.pointSize: 10
+            property string suffix: " m"
+
             Layout.alignment: Qt.AlignVCenter
 
-            property string suffix: " m"
             textFromValue: value => value + suffix
             valueFromText: value => value.slice(0, -suffix.length)
         }
