@@ -13,6 +13,20 @@ Window {
 
     title: qsTr("Pomodoro Timer")
 
+    component IndicatorButton : Rectangle {
+        implicitWidth: 40
+        implicitHeight: 40
+        color: spin.down.pressed ? "#9E2222" : "#AD2525"
+        property alias text: buttonText.text
+        Text {
+            id: buttonText
+            anchors.centerIn: parent
+            anchors.verticalCenterOffset: -4
+            font.pointSize: 32
+            color: "white"
+        }
+    }
+
     component TimeSelector: RowLayout  {
         id: timeSelector
         spacing: 20
@@ -25,8 +39,11 @@ Window {
             font.pointSize: 10
             Layout.alignment: Qt.AlignVCenter
         }
+
         Item { Layout.fillWidth: true } // spacer
+
         SpinBox {
+            id: spin
             value: 25
             to: 240
             editable: true
@@ -37,7 +54,32 @@ Window {
 
             textFromValue: value => value + suffix
             valueFromText: value => value.slice(0, -suffix.length)
+
+
+            down.indicator: IndicatorButton {
+                text: "-"
+            }
+
+            up.indicator: IndicatorButton {
+                text: "+"
+                anchors.right: parent.right
+            }
+
+            background: Rectangle {
+                height: 40
+                color: "white"
+                border.color: "#7D1919"
+                border.width: 1
+            }
         }
+    }
+
+    component TimerScale: RowLayout  {
+        
+    }
+    
+    ToolBar {
+        background: TimerScale
     }
 
     ColumnLayout  {
