@@ -16,7 +16,7 @@ Window {
     component IndicatorButton : Rectangle {
         implicitWidth: 40
         implicitHeight: 40
-        color: spin.down.pressed ? "#9E2222" : "#AD2525"
+        color: "#AD2525"
         property alias text: buttonText.text
         Text {
             id: buttonText
@@ -58,11 +58,13 @@ Window {
 
             down.indicator: IndicatorButton {
                 text: "-"
+                color: spin.down.pressed ? "#9E2222" : "#AD2525"
             }
 
             up.indicator: IndicatorButton {
                 text: "+"
                 anchors.right: parent.right
+                color: spin.up.pressed ? "#9E2222" : "#AD2525"
             }
 
             background: Rectangle {
