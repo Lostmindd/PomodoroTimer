@@ -4,6 +4,8 @@ import QtQuick.Layouts
 
 Window {
     visible: true
+    title: qsTr("Pomodoro Timer")
+
     width: 300
     height: 200
     maximumHeight: height
@@ -11,11 +13,9 @@ Window {
     minimumHeight: height
     minimumWidth: width
 
-    title: qsTr("Pomodoro Timer")
-
     component IndicatorButton : Rectangle {
-        implicitWidth: 40
-        implicitHeight: 40
+        implicitWidth: timeSelector.height
+        implicitHeight: timeSelector.height
         color: "#AD2525"
         property alias text: buttonText.text
         Text {
@@ -31,6 +31,7 @@ Window {
         id: timeSelector
         spacing: 20
         Layout.maximumWidth: 300
+        height: 40
 
         property alias text: label.text
 
@@ -44,16 +45,17 @@ Window {
 
         SpinBox {
             id: spin
-            value: 25
+            value: 10
             to: 240
             editable: true
             font.pointSize: 10
             property string suffix: " m"
 
             Layout.alignment: Qt.AlignVCenter
+            Layout.minimumWidth: 130
 
             textFromValue: value => value + suffix
-            valueFromText: value => value.slice(0, -suffix.length)
+            valueFromText: value => parseInt(value)
 
 
             down.indicator: IndicatorButton {
@@ -68,7 +70,7 @@ Window {
             }
 
             background: Rectangle {
-                height: 40
+                height: timeSelector.height
                 color: "white"
                 border.color: "#7D1919"
                 border.width: 1
