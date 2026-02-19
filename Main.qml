@@ -6,8 +6,10 @@ Window {
     visible: true
     title: qsTr("Pomodoro Timer")
 
-    width: 300
+    width: 280
+    // width: 380
     height: 200
+    // height: 460
     maximumHeight: height
     maximumWidth: width
     minimumHeight: height
@@ -22,16 +24,17 @@ Window {
             id: buttonText
             anchors.centerIn: parent
             anchors.verticalCenterOffset: -4
-            font.pointSize: 32
+            font.pointSize: 26
             color: "white"
         }
     }
 
+    // Исправить баг с вводмо букв и увеличить все приложение
     component TimeSelector: RowLayout  {
         id: timeSelector
         spacing: 20
-        Layout.maximumWidth: 300
-        height: 40
+        height: 30
+        property alias value: spin.value
 
         property alias text: label.text
 
@@ -45,14 +48,13 @@ Window {
 
         SpinBox {
             id: spin
-            value: 10
             to: 240
             editable: true
             font.pointSize: 10
             property string suffix: " m"
 
             Layout.alignment: Qt.AlignVCenter
-            Layout.minimumWidth: 130
+            Layout.minimumWidth: 120
 
             textFromValue: value => value + suffix
             valueFromText: value => parseInt(value)
@@ -92,12 +94,15 @@ Window {
 
         TimeSelector {
             text: qsTr("Focus")
+            value: 25
         }
         TimeSelector {
             text: qsTr("Short Break")
+            value: 5
         }
         TimeSelector {
             text: qsTr("Long Break")
+            value: 15
         }
     }
 }
