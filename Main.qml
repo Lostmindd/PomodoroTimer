@@ -29,14 +29,14 @@ Window {
         }
     }
 
-    // Исправить баг с вводмо букв и увеличить все приложение
     component TimeSelector: RowLayout  {
         id: timeSelector
         spacing: 20
         height: 30
         property alias value: spin.value
-
         property alias text: label.text
+        property color mainColor: "#AD2525"
+        property color darkColor: "#9E2222"
 
         Text {
             id: label
@@ -56,25 +56,35 @@ Window {
             Layout.alignment: Qt.AlignVCenter
             Layout.minimumWidth: 120
 
-            textFromValue: value => value + suffix
+            textFromValue: value => spin.activeFocus? value : value + suffix
             valueFromText: value => parseInt(value)
+
+            // textFromValue is not called without changing the value to a new one
+            onActiveFocusChanged: {
+                if (activeFocus)
+                {
+                    const val = spin.value
+                    spin.value = -1
+                    spin.value = val
+                }
+            }
 
 
             down.indicator: IndicatorButton {
                 text: "-"
-                color: spin.down.pressed ? "#9E2222" : "#AD2525"
+                color: spin.down.pressed ? darkColor : mainColor
             }
 
             up.indicator: IndicatorButton {
                 text: "+"
                 anchors.right: parent.right
-                color: spin.up.pressed ? "#9E2222" : "#AD2525"
+                color: spin.up.pressed ? darkColor : mainColor
             }
 
             background: Rectangle {
                 height: timeSelector.height
                 color: "white"
-                border.color: "#7D1919"
+                border.color: mainColor
                 border.width: 1
             }
         }
