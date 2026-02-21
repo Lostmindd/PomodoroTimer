@@ -3,17 +3,21 @@ import QtQuick.Controls.Basic
 import QtQuick.Layouts
 
 Window {
+    id: window
     visible: true
     title: qsTr("Pomodoro Timer")
 
-    width: 280
-    // width: 380
-    height: 200
-    // height: 460
+    // width: 280
+    width: 380
+    // height: 200
+    height: 460
     maximumHeight: height
     maximumWidth: width
     minimumHeight: height
     minimumWidth: width
+
+    property color mainColor: "#AD2525"
+    property color darkColor: "#9E2222"
 
     component IndicatorButton : Rectangle {
         implicitWidth: timeSelector.height
@@ -29,32 +33,29 @@ Window {
         }
     }
 
-    component TimeSelector: RowLayout  {
+    component TimeSelector: Item  {
         id: timeSelector
-        spacing: 20
-        height: 30
+        height: 40
+        width: parent.width
         property alias value: spin.value
         property alias text: label.text
-        property color mainColor: "#AD2525"
-        property color darkColor: "#9E2222"
 
         Text {
             id: label
-            font.pointSize: 10
-            Layout.alignment: Qt.AlignVCenter
+            anchors.left: timeSelector.left
+            anchors.verticalCenter: timeSelector.verticalCenter
+            font.pointSize: 14
         }
-
-        Item { Layout.fillWidth: true } // spacer
 
         SpinBox {
             id: spin
+            anchors.right: timeSelector.right
+            implicitWidth: 160
+
             to: 240
             editable: true
-            font.pointSize: 10
+            font.pointSize: 14
             property string suffix: " m"
-
-            Layout.alignment: Qt.AlignVCenter
-            Layout.minimumWidth: 120
 
             textFromValue: value => spin.activeFocus? value : value + suffix
             valueFromText: value => parseInt(value)
@@ -68,7 +69,6 @@ Window {
                     spin.value = val
                 }
             }
-
 
             down.indicator: IndicatorButton {
                 text: "-"
@@ -85,34 +85,55 @@ Window {
                 height: timeSelector.height
                 color: "white"
                 border.color: mainColor
-                border.width: 1
+                border.width: 2
             }
         }
     }
 
-    component TimerScale: RowLayout  {
-        
-    }
-    
-    ToolBar {
-        background: TimerScale
+    component TimerScale: Rectangle  {
+        width: parent.width
+        border.color: mainColor
+        border.width: 2
     }
 
-    ColumnLayout  {
-        anchors.fill: parent
+    TimerScale {
+        id: scale
+
+        height: 40
+        // anchors.left: parent.left
+        // anchors.bottom: parent.top
+    }
+
+    // ToolBar {
+    //     background: TimerScale
+    // }
+
+    Rectangle {
+        id: settings
+        anchors.top: scale.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
         anchors.margins: 20
+        height: col.implicitHeight
 
-        TimeSelector {
-            text: qsTr("Focus")
-            value: 25
-        }
-        TimeSelector {
-            text: qsTr("Short Break")
-            value: 5
-        }
-        TimeSelector {
-            text: qsTr("Long Break")
-            value: 15
+        Column  {
+            id: col
+            width: parent.width
+            spacing: 40
+
+            TimeSelector {
+                text: qsTr("Focus")
+                value: 25
+            }
+            TimeSelector {
+                text: qsTr("Short Break")
+                value: 5
+            }
+            TimeSelector {
+                text: qsTr("Long Break")
+                value: 150
+            }
         }
     }
+
 }
