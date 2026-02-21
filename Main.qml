@@ -17,7 +17,7 @@ Window {
     minimumWidth: width
 
     property color mainColor: "#AD2525"
-    property color darkColor: "#9E2222"
+    property color secondColor: "#9E2222"
 
     component IndicatorButton : Rectangle {
         implicitWidth: timeSelector.height
@@ -28,7 +28,7 @@ Window {
             id: buttonText
             anchors.centerIn: parent
             anchors.verticalCenterOffset: -4
-            font.pointSize: 26
+            font.pointSize: 24
             color: "white"
         }
     }
@@ -72,13 +72,13 @@ Window {
 
             down.indicator: IndicatorButton {
                 text: "-"
-                color: spin.down.pressed ? darkColor : mainColor
+                color: spin.down.pressed ? secondColor : mainColor
             }
 
             up.indicator: IndicatorButton {
                 text: "+"
                 anchors.right: parent.right
-                color: spin.up.pressed ? darkColor : mainColor
+                color: spin.up.pressed ? secondColor : mainColor
             }
 
             background: Rectangle {
@@ -136,4 +136,19 @@ Window {
         }
     }
 
+    Button {
+        anchors.margins: 20
+        anchors.top: settings.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: 120
+        height: 40
+        text: qsTr("start")
+        font.pointSize: 22
+        background: Rectangle {
+                    color: parent.down ? secondColor : mainColor
+                }
+        palette.buttonText: "white"
+        contentItem.anchors.verticalCenter: verticalCenter
+        contentItem.anchors.verticalCenterOffset: -2
+    }
 }
