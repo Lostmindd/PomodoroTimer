@@ -19,6 +19,20 @@ Window {
     property color mainColor: "#AD2525"
     property color secondColor: "#9E2222"
 
+    component TimerScale: Rectangle  {
+        width: parent.width
+        border.color: mainColor
+        border.width: 2
+    }
+
+    TimerScale {
+        id: scale
+
+        height: 40
+        // anchors.left: parent.left
+        // anchors.bottom: parent.top
+    }
+
     component IndicatorButton : Rectangle {
         implicitWidth: timeSelector.height
         implicitHeight: timeSelector.height
@@ -90,24 +104,6 @@ Window {
         }
     }
 
-    component TimerScale: Rectangle  {
-        width: parent.width
-        border.color: mainColor
-        border.width: 2
-    }
-
-    TimerScale {
-        id: scale
-
-        height: 40
-        // anchors.left: parent.left
-        // anchors.bottom: parent.top
-    }
-
-    // ToolBar {
-    //     background: TimerScale
-    // }
-
     Rectangle {
         id: settings
         anchors.top: scale.bottom
@@ -137,18 +133,37 @@ Window {
     }
 
     Button {
+        id: startButton
+
         anchors.margins: 20
         anchors.top: settings.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         width: 120
         height: 40
         text: qsTr("start")
-        font.pointSize: 22
+
         background: Rectangle {
-                    color: parent.down ? secondColor : mainColor
-                }
+            color: parent.down ? secondColor : mainColor
+        }
+
         palette.buttonText: "white"
+        font.pointSize: 22
         contentItem.anchors.verticalCenter: verticalCenter
         contentItem.anchors.verticalCenterOffset: -2
+    }
+
+    component Timer: Rectangle  {
+        border.color: mainColor
+        border.width: 2
+    }
+
+    Timer {
+        id: timer
+
+        anchors.margins: 10
+        width: 240
+        height: 120
+        anchors.top: startButton.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
     }
 }
