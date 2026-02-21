@@ -7,9 +7,7 @@ Window {
     visible: true
     title: qsTr("Pomodoro Timer")
 
-    // width: 280
     width: 380
-    // height: 200
     height: 460
     maximumHeight: height
     maximumWidth: width
@@ -60,7 +58,8 @@ Window {
             anchors.right: timeSelector.right
             implicitWidth: 160
 
-            to: 240
+            from: 1
+            to: 99
             editable: true
             font.pointSize: 14
             property string suffix: " m"
