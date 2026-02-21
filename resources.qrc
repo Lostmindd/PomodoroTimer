@@ -2,5 +2,7 @@
     <qresource prefix="/icons">
         <file>resources/icon.svg</file>
     </qresource>
-    <qresource prefix="/"/>
+    <qresource prefix="/sounds">
+        <file>resources/ring.mp3</file>
+    </qresource>
 </RCC>
