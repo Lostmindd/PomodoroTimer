@@ -19,12 +19,6 @@ Window {
     property color mainColor: "#AD2525"
     property color secondColor: "#9E2222"
 
-    component TimerScale: Rectangle  {
-        width: parent.width
-        border.color: mainColor
-        border.width: 2
-    }
-
     TimerScale {
         id: scale
 
@@ -152,14 +146,8 @@ Window {
         contentItem.anchors.verticalCenterOffset: -2
     }
 
-    component Timer: Rectangle  {
-        border.color: mainColor
-        border.width: 2
-    }
-
-    Timer {
+    TimerField {
         id: timer
-
         anchors.margins: 10
         width: 240
         height: 120
