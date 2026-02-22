@@ -4,14 +4,42 @@ import QtMultimedia
 Rectangle {
     border.color: mainColor
     border.width: 2
+    property alias running: counter.running
+    property alias phase: phaseLabel.text
+    // property alias secondLeft: time.secondsLeft
+
+    function updateTimeLabel() {
+        if (!running)
+            time.secondsLeft = pomodoroCycle.currentMinutes() //* 60
+    }
 
     function start(minutes) {
-        var secs = minutes * 60
-        time.secondsLeft = secs
-        running = true
+        updateTimeLabel()
+        counter.running = true
+    }
+
+    function stop() {
+        counter.running = false
+        updateTimeLabel()
     }
 
     Text {
+        id: phaseLabel
+        text: pomodoroCycle.currentPhaseAsText()
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.topMargin: 14
+        color: mainColor
+        font.pointSize: 14
+    }
+
+    Text {
+        id: time
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottomMargin: 8
+
+        property int secondsLeft: pomodoroCycle.currentMinutes() //* 60
         function formatTime(seconds) {
             var mins = Math.floor(seconds / 60)
             var secs = seconds % 60
@@ -19,13 +47,6 @@ Rectangle {
             return mins.toString().padStart(2, "0") + ":" +
                     secs.toString().padStart(2, "0")
         }
-
-        id: time
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
-
-        property int secondsLeft: 5
-
         text: formatTime(secondsLeft)
         color: mainColor
         font.pointSize: 50
@@ -38,17 +59,18 @@ Rectangle {
     }
 
     Timer {
-        id: timer
-        running: true;
+        id: counter
         repeat: true
         onTriggered: {
+            time.secondsLeft = time.secondsLeft - 1
             if (time.secondsLeft < 1) {
-                running = false
+                stop()
+                pomodoroCycle.nextStep()
+                time.secondsLeft = pomodoroCycle.currentMinutes() //* 60
+                visibility = Window.Windowed
                 return
             }
-            else if (time.secondsLeft == 1) {visibility = Window.Windowed}
-            else if (time.secondsLeft == 4) {bell.play()}
-            time.secondsLeft = time.secondsLeft - 1
+            else if (time.secondsLeft == 3) {bell.play()}
         }
     }
 }

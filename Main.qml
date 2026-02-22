@@ -45,6 +45,7 @@ Window {
         width: parent.width
         property alias value: spin.value
         property alias text: label.text
+        property alias currentValue: spin.value
 
         Text {
             id: label
@@ -59,13 +60,15 @@ Window {
             implicitWidth: 160
 
             from: 1
-            to: 99
+            to: 240
             editable: true
             font.pointSize: 14
             property string suffix: " m"
 
             textFromValue: value => spin.activeFocus? value : value + suffix
             valueFromText: value => parseInt(value)
+
+            // onValueChanged: valueChanged()
 
             // textFromValue is not called without changing the value to a new one
             onActiveFocusChanged: {
@@ -111,18 +114,26 @@ Window {
             spacing: 40
 
             TimeSelector {
+                id: focus
                 text: qsTr("Focus")
-                value: 25
+                value: 3 //25
             }
             TimeSelector {
+                id: shortBreak
                 text: qsTr("Short Break")
-                value: 5
+                value: 1//5
             }
             TimeSelector {
+                id: longBreak
                 text: qsTr("Long Break")
-                value: 150
+                value: 4//15
             }
         }
+    }
+
+    PomodoroCycle {
+        id: pomodoroCycle
+        // onCurrentPhaseChanged: timer.phase = currentPhaseAsText()
     }
 
     Button {
@@ -133,7 +144,7 @@ Window {
         anchors.horizontalCenter: parent.horizontalCenter
         width: 120
         height: 40
-        text: qsTr("start")
+        text: timer.running? qsTr("stop") : qsTr("start")
 
         background: Rectangle {
             color: parent.down ? secondColor : mainColor
@@ -143,6 +154,15 @@ Window {
         font.pointSize: 22
         contentItem.anchors.verticalCenter: verticalCenter
         contentItem.anchors.verticalCenterOffset: -2
+        onClicked: {
+            if (timer.running){
+                pomodoroCycle.reset()
+                timer.stop()
+            }
+            else{
+                timer.start(pomodoroCycle.currentMinutes())
+            }
+        }
     }
 
     TimerField {
@@ -152,5 +172,18 @@ Window {
         height: 120
         anchors.top: startButton.bottom
         anchors.horizontalCenter: parent.horizontalCenter
+
+        Connections {
+            target: focus
+            function onCurrentValueChanged(){timer.updateTimeLabel()}
+        }
+        Connections {
+            target: shortBreak
+            function onCurrentValueChanged(){timer.updateTimeLabel()}
+        }
+        Connections {
+            target: longBreak
+            function onCurrentValueChanged(){timer.updateTimeLabel()}
+        }
     }
 }
