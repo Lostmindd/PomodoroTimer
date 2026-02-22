@@ -24,8 +24,7 @@ QtObject {
             currentPhase = PomodoroCycle.Phase.Focus
             break
         case PomodoroCycle.Phase.LongBreak:
-            focusCount = 0
-            currentPhase = PomodoroCycle.Phase.Focus
+            reset()
             break
         }
     }
@@ -39,5 +38,21 @@ QtObject {
         case PomodoroCycle.Phase.LongBreak:
             return longBreak.value
         }
+    }
+
+    function currentPhaseAsText(){
+        switch (currentPhase) {
+        case PomodoroCycle.Phase.Focus:
+            return "focus"
+        case PomodoroCycle.Phase.ShortBreak:
+            return "short break"
+        case PomodoroCycle.Phase.LongBreak:
+            return "long break"
+        }
+    }
+
+    function reset(){
+        focusCount = 0
+        currentPhase = PomodoroCycle.Phase.Focus
     }
 }
