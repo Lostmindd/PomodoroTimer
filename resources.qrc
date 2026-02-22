@@ -4,5 +4,6 @@
     </qresource>
     <qresource prefix="/sounds">
         <file>resources/ring.mp3</file>
+        <file>resources/start.mp3</file>
     </qresource>
 </RCC>

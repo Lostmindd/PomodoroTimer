@@ -15,11 +15,14 @@ Rectangle {
 
     function start(minutes) {
         updateTimeLabel()
+        startSound.play()
         counter.running = true
     }
 
     function stop() {
         counter.running = false
+        bell.stop()
+        startSound.stop()
         updateTimeLabel()
     }
 
@@ -56,6 +59,12 @@ Rectangle {
         id: bell
         audioOutput: AudioOutput {}
         source: "qrc:/sounds/resources/ring.mp3"
+    }
+
+    MediaPlayer {
+        id: startSound
+        audioOutput: AudioOutput {}
+        source: "qrc:/sounds/resources/start.mp3"
     }
 
     Timer {
