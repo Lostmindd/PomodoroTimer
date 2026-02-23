@@ -32,11 +32,11 @@ QtObject {
     function currentMinutes() {
         switch (currentPhase) {
         case PomodoroCycle.Phase.Focus:
-            return focus.value
+            return focus.currentValue
         case PomodoroCycle.Phase.ShortBreak:
-            return shortBreak.value
+            return shortBreak.currentValue
         case PomodoroCycle.Phase.LongBreak:
-            return longBreak.value
+            return longBreak.currentValue
         }
     }
 

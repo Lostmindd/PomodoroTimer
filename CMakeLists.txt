@@ -22,6 +22,7 @@ qt_add_qml_module(appPomodoroTimer
         TimerField.qml
         TimerScale.qml
         PomodoroCycle.qml
+        TimeSelector.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

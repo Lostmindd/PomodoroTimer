@@ -6,7 +6,6 @@ Rectangle {
     border.width: 2
     property alias running: counter.running
     property alias phase: phaseLabel.text
-    // property alias secondLeft: time.secondsLeft
 
     function updateTimeLabel() {
         if (!running)
@@ -38,11 +37,13 @@ Rectangle {
 
     Text {
         id: time
+        color: mainColor
+        font.pointSize: 50
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottomMargin: 8
 
-        property int secondsLeft: pomodoroCycle.currentMinutes() //* 60
+        property int secondsLeft: updateTimeLabel()
         function formatTime(seconds) {
             var mins = Math.floor(seconds / 60)
             var secs = seconds % 60
@@ -51,8 +52,6 @@ Rectangle {
                     secs.toString().padStart(2, "0")
         }
         text: formatTime(secondsLeft)
-        color: mainColor
-        font.pointSize: 50
     }
 
     MediaPlayer {
@@ -75,7 +74,7 @@ Rectangle {
             if (time.secondsLeft < 1) {
                 stop()
                 pomodoroCycle.nextStep()
-                time.secondsLeft = pomodoroCycle.currentMinutes() //* 60
+                updateTimeLabel()
                 visibility = Window.Windowed
                 return
             }

@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls.Basic
-import QtQuick.Layouts
 
 Window {
     id: window
@@ -25,81 +24,6 @@ Window {
         // anchors.bottom: parent.top
     }
 
-    component IndicatorButton : Rectangle {
-        implicitWidth: timeSelector.height
-        implicitHeight: timeSelector.height
-        color: "#AD2525"
-        property alias text: buttonText.text
-        Text {
-            id: buttonText
-            anchors.centerIn: parent
-            anchors.verticalCenterOffset: -4
-            font.pointSize: 24
-            color: "white"
-        }
-    }
-
-    component TimeSelector: Item  {
-        id: timeSelector
-        height: 40
-        width: parent.width
-        property alias value: spin.value
-        property alias text: label.text
-        property alias currentValue: spin.value
-
-        Text {
-            id: label
-            anchors.left: timeSelector.left
-            anchors.verticalCenter: timeSelector.verticalCenter
-            font.pointSize: 14
-        }
-
-        SpinBox {
-            id: spin
-            anchors.right: timeSelector.right
-            implicitWidth: 160
-
-            from: 1
-            to: 240
-            editable: true
-            font.pointSize: 14
-            property string suffix: " m"
-
-            textFromValue: value => spin.activeFocus? value : value + suffix
-            valueFromText: value => parseInt(value)
-
-            // onValueChanged: valueChanged()
-
-            // textFromValue is not called without changing the value to a new one
-            onActiveFocusChanged: {
-                if (activeFocus)
-                {
-                    const val = spin.value
-                    spin.value = -1
-                    spin.value = val
-                }
-            }
-
-            down.indicator: IndicatorButton {
-                text: "-"
-                color: spin.down.pressed ? secondColor : mainColor
-            }
-
-            up.indicator: IndicatorButton {
-                text: "+"
-                anchors.right: parent.right
-                color: spin.up.pressed ? secondColor : mainColor
-            }
-
-            background: Rectangle {
-                height: timeSelector.height
-                color: "white"
-                border.color: mainColor
-                border.width: 2
-            }
-        }
-    }
-
     Rectangle {
         id: settings
         anchors.top: scale.bottom
@@ -116,24 +40,23 @@ Window {
             TimeSelector {
                 id: focus
                 text: qsTr("Focus")
-                value: 3 //25
+                currentValue: 3 //25
             }
             TimeSelector {
                 id: shortBreak
                 text: qsTr("Short Break")
-                value: 1//5
+                currentValue: 1//5
             }
             TimeSelector {
                 id: longBreak
                 text: qsTr("Long Break")
-                value: 4//15
+                currentValue: 4//15
             }
         }
     }
 
     PomodoroCycle {
         id: pomodoroCycle
-        // onCurrentPhaseChanged: timer.phase = currentPhaseAsText()
     }
 
     Button {
@@ -145,7 +68,6 @@ Window {
         width: 120
         height: 40
         text: timer.running? qsTr("stop") : qsTr("start")
-
         background: Rectangle {
             color: parent.down ? secondColor : mainColor
         }
@@ -154,6 +76,7 @@ Window {
         font.pointSize: 22
         contentItem.anchors.verticalCenter: verticalCenter
         contentItem.anchors.verticalCenterOffset: -2
+
         onClicked: {
             if (timer.running){
                 pomodoroCycle.reset()
