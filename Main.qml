@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls.Basic
+import QtCore
 
 Window {
     id: window
@@ -53,6 +54,13 @@ Window {
                 currentValue: 4//15
             }
         }
+
+        // saving time settings
+        Settings {
+            property alias focusTime: focus.currentValue
+            property alias shortBreakTime: shortBreak.currentValue
+            property alias longBreakTime: longBreak.currentValue
+         }
     }
 
     PomodoroCycle {
