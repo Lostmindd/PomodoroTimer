@@ -9,27 +9,6 @@ Rectangle {
     property alias phaseLabelText: phaseLabel.phaseLabelText
     property int focusCount: 0
 
-    function updateTimeLabel() {
-        if (!running)
-            time.secondsLeft = pomodoroCycle.currentMinutes() //* 60
-    }
-
-    function start(minutes) {
-        updateTimeLabel()
-        startSound.play()
-        counter.running = true
-
-        if (currentPhase == PomodoroCycle.Phase.Focus)
-            phaseLabel.showCycles()
-    }
-
-    function stop() {
-        counter.running = false
-        bell.stop()
-        startSound.stop()
-        updateTimeLabel()
-    }
-
     PhaseLabel {
         id: phaseLabel
         anchors.left: parent.left
@@ -38,8 +17,6 @@ Rectangle {
         anchors.bottom: time.top
         anchors.margins: 5
         anchors.bottomMargin: -20
-
-        // phaseText: pomodoroCycle.currentPhaseAsText()
     }
     onFocusCountChanged: phaseLabel.fillCycles(focusCount+1)
 
@@ -89,5 +66,27 @@ Rectangle {
             }
             else if (time.secondsLeft == 3) {bell.play()}
         }
+    }
+
+    function updateTimeLabel() {
+        if (!running)
+            time.secondsLeft = pomodoroCycle.currentMinutes() //* 60
+    }
+
+    function start(minutes) {
+        updateTimeLabel()
+        startSound.play()
+        counter.running = true
+
+        if (currentPhase == PomodoroCycle.Phase.Focus)
+            phaseLabel.showCycles()
+    }
+
+    function stop() {
+        counter.running = false
+        bell.stop()
+        startSound.stop()
+        updateTimeLabel()
+        phaseLabel.hideCycles()
     }
 }
