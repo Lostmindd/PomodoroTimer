@@ -5,7 +5,9 @@ Rectangle {
     border.color: mainColor
     border.width: 2
     property alias running: counter.running
-    property alias phase: phaseLabel.text
+    property int currentPhase: PomodoroCycle.Phase.Focus
+    property alias phaseLabelText: phaseLabel.phaseLabelText
+    property int focusCount: 0
 
     function updateTimeLabel() {
         if (!running)
@@ -16,6 +18,9 @@ Rectangle {
         updateTimeLabel()
         startSound.play()
         counter.running = true
+
+        if (currentPhase == PomodoroCycle.Phase.Focus)
+            phaseLabel.showCycles()
     }
 
     function stop() {
@@ -25,15 +30,18 @@ Rectangle {
         updateTimeLabel()
     }
 
-    Text {
+    PhaseLabel {
         id: phaseLabel
-        text: pomodoroCycle.currentPhaseAsText()
+        anchors.left: parent.left
+        anchors.right: parent.right
         anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 14
-        color: mainColor
-        font.pointSize: 14
+        anchors.bottom: time.top
+        anchors.margins: 5
+        anchors.bottomMargin: -20
+
+        // phaseText: pomodoroCycle.currentPhaseAsText()
     }
+    onFocusCountChanged: phaseLabel.fillCycles(focusCount+1)
 
     Text {
         id: time
@@ -73,6 +81,7 @@ Rectangle {
             time.secondsLeft = time.secondsLeft - 1
             if (time.secondsLeft < 1) {
                 stop()
+                phaseLabel.hideCycles()
                 pomodoroCycle.nextStep()
                 updateTimeLabel()
                 visibility = Window.Windowed

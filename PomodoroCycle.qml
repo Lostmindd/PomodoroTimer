@@ -40,8 +40,8 @@ QtObject {
         }
     }
 
-    function currentPhaseAsText(){
-        switch (currentPhase) {
+    function phaseAsText(phase){
+        switch (phase) {
         case PomodoroCycle.Phase.Focus:
             return "focus"
         case PomodoroCycle.Phase.ShortBreak:

@@ -104,6 +104,11 @@ Window {
         anchors.top: startButton.bottom
         anchors.horizontalCenter: parent.horizontalCenter
 
+        currentPhase: pomodoroCycle.currentPhase
+        phaseLabelText: pomodoroCycle.phaseAsText(pomodoroCycle.currentPhase)
+        focusCount: pomodoroCycle.focusCount
+
+
         Connections {
             target: focus
             function onCurrentValueChanged(){timer.updateTimeLabel()}
