@@ -103,6 +103,11 @@ Window {
         height: 120
         anchors.top: startButton.bottom
         anchors.horizontalCenter: parent.horizontalCenter
+        onTimeOver: {
+            visibility = Window.Windowed
+            pomodoroCycle.nextStep()
+        }
+        maxMinutes: pomodoroCycle.currentMinutes()
 
         currentPhase: pomodoroCycle.currentPhase
         phaseLabelText: pomodoroCycle.phaseAsText(pomodoroCycle.currentPhase)

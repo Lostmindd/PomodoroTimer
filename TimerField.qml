@@ -5,9 +5,13 @@ Rectangle {
     border.color: mainColor
     border.width: 2
     property alias running: counter.running
-    property int currentPhase: PomodoroCycle.Phase.Focus
     property alias phaseLabelText: phaseLabel.phaseLabelText
+
+    property int maxMinutes
     property int focusCount: 0
+    property int currentPhase: PomodoroCycle.Phase.Focus
+
+    signal timeOver()
 
     PhaseLabel {
         id: phaseLabel
@@ -58,10 +62,9 @@ Rectangle {
             time.secondsLeft = time.secondsLeft - 1
             if (time.secondsLeft < 1) {
                 stop()
+                parent.timeOver()
                 phaseLabel.hideCycles()
-                pomodoroCycle.nextStep()
                 updateTimeLabel()
-                visibility = Window.Windowed
                 return
             }
             else if (time.secondsLeft == 3) {bell.play()}
@@ -70,7 +73,7 @@ Rectangle {
 
     function updateTimeLabel() {
         if (!running)
-            time.secondsLeft = pomodoroCycle.currentMinutes() //* 60
+            time.secondsLeft = maxMinutes //* 60
     }
 
     function start(minutes) {
