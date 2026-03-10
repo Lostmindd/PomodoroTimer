@@ -1,9 +1,6 @@
 import QtQuick
 
 Rectangle {
-    anchors.top: parent.top
-    anchors.horizontalCenter: parent.horizontalCenter
-
     property alias phaseLabelText: phaseLabel.text
 
     Text {
