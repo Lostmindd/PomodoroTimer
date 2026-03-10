@@ -92,6 +92,7 @@ Window {
             }
             else{
                 timer.start(pomodoroCycle.currentMinutes())
+                scale.reset()
             }
         }
     }
@@ -103,16 +104,18 @@ Window {
         height: 120
         anchors.top: startButton.bottom
         anchors.horizontalCenter: parent.horizontalCenter
+
         onTimeOver: {
             visibility = Window.Windowed
             pomodoroCycle.nextStep()
         }
         maxMinutes: pomodoroCycle.currentMinutes()
 
+        onTick: scale.nextStep()
+
         currentPhase: pomodoroCycle.currentPhase
         phaseLabelText: pomodoroCycle.phaseAsText(pomodoroCycle.currentPhase)
         focusCount: pomodoroCycle.focusCount
-
 
         Connections {
             target: focus

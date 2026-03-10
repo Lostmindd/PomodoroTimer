@@ -13,6 +13,8 @@ Rectangle {
 
     signal timeOver()
 
+    signal tick()
+
     PhaseLabel {
         id: phaseLabel
         anchors.left: parent.left
@@ -59,6 +61,7 @@ Rectangle {
         id: counter
         repeat: true
         onTriggered: {
+            tick()
             time.secondsLeft = time.secondsLeft - 1
             if (time.secondsLeft < 1) {
                 stop()
