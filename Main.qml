@@ -89,10 +89,12 @@ Window {
             if (timer.running){
                 pomodoroCycle.reset()
                 timer.stop()
+                scale.reset()
             }
             else{
                 timer.start(pomodoroCycle.currentMinutes())
-                scale.reset()
+                scale.stepsLeft = pomodoroCycle.currentMinutes() //* 60
+                // scale.reset()
             }
         }
     }
