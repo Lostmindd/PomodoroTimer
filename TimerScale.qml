@@ -8,7 +8,6 @@ Rectangle  {
     readonly property int lineThickness: 2
     readonly property int divisionsNum: 31
     readonly property int bigDivisionsPos: 5
-    readonly property int stepsBetweenDivisions: 1
 
     property int minutes: 0
     property color mainColor
@@ -118,6 +117,7 @@ Rectangle  {
 
     function nextStep() {
         const  spacingSizeWithDivision = divisionLines.spacingSize + lineThickness
+        const stepsBetweenDivisions = 60 // 1 minute
         const  stepSize = spacingSizeWithDivision / stepsBetweenDivisions
         const  newPadding = Math.abs(divisions.anchors.leftMargin) + stepSize
         const  startOffset = Math.ceil((parent.width / 2) / spacingSizeWithDivision) * spacingSizeWithDivision

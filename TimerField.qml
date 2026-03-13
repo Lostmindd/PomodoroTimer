@@ -83,7 +83,7 @@ Rectangle {
 
     function updateTimeLabel() {
         if (!running)
-            time.secondsLeft = maxMinutes //* 60
+            time.secondsLeft = maxMinutes * 60
     }
 
     function start(minutes) {
