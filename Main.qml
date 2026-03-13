@@ -93,8 +93,8 @@ Window {
             }
             else{
                 timer.start(pomodoroCycle.currentMinutes())
-                scale.stepsLeft = pomodoroCycle.currentMinutes() //* 60
-                // scale.reset()
+                scale.minutes = pomodoroCycle.currentMinutes() //* 60
+                scale.reset()
             }
         }
     }

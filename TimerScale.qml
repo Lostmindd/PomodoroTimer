@@ -5,34 +5,85 @@ Rectangle  {
     id: scale
     width: parent.width
 
-    property int lineThickness: 2
-    property int divisionsNum: 31
+    readonly property int lineThickness: 2
+    readonly property int divisionsNum: 31
+    readonly property int bigDivisionsPos: 5
+    readonly property int stepBetweenDivisions: 1
 
-    component Line : Rectangle {
+    property int minutes: 0
+
+    component HorizontalLine : Rectangle {
         width: parent.width
         height: lineThickness
         color: mainColor
      }
 
-    Line {
-       anchors.top: parent.top
+    HorizontalLine {
+        id: topHorizontalLine
+        anchors.top: parent.top
     }
 
-    Row {
+    Item {
         id: divisions
+
         anchors.top: parent.top
-        topPadding: lineThickness + 2
-        property int offset: 0
+        anchors.left: parent.horizontalCenter
 
-        spacing: (parent.width - divisionsNum * lineThickness) / (divisionsNum - 1)
-        Repeater {
-            model: divisionsNum
+        width: parent.width
+        height: parent.height
+        anchors.leftMargin: -1
 
-            Rectangle {
-                width: lineThickness
-                height: 6 + ((index - divisions.offset) % 5 == 0 ? 6 : 0)
-                color: mainColor
+        Row {
+            id: divisionLines
+            topPadding: topHorizontalLine.height + 2
+
+            property int bigDivisionOffset: 0
+            property real spacingSize: Math.round((parent.width * 1.1 - divisionsNum * lineThickness) / (divisionsNum - 1))
+            spacing: spacingSize
+
+            Repeater {
+                model: divisionsNum
+
+                Rectangle {
+                    width: lineThickness
+                    height: divisionLines.calculateHeight(index)
+                    color: mainColor
+                }
             }
+
+            function calculateHeight(index) {
+                return 6 + ((index + divisionLines.bigDivisionOffset) % bigDivisionsPos == 0 ? 6 : 0)
+            }
+        }
+
+        component BoundaryLine : Rectangle {
+            width: lineThickness
+            height: parent.height
+            anchors.left: parent.left
+
+            color: mainColor
+        }
+
+        BoundaryLine {
+            id: stopLine
+            anchors.leftMargin: calculateLeftMargin()
+
+            function calculateLeftMargin() {
+                var spacingSizeWithDivision = divisionLines.spacingSize + lineThickness
+                return (minutes * spacingSizeWithDivision)
+            }
+        }
+
+        BoundaryLine {
+            id: startLine
+        }
+
+        NumberAnimation {
+            id: animateDivisions
+            target: divisions
+            properties: "anchors.leftMargin"
+            from: divisions.anchors.leftMargin
+            to: -1
         }
     }
 
@@ -59,15 +110,29 @@ Rectangle  {
         }
     }
 
-    Line {
+    HorizontalLine {
        anchors.bottom: parent.bottom
     }
 
     function nextStep() {
-        divisions.offset = (divisions.offset + 1) % 5
+        var spacingSizeWithDivision = divisionLines.spacingSize + lineThickness
+        var newPadding = (Math.abs(divisions.anchors.leftMargin) + spacingSizeWithDivision / stepBetweenDivisions)
+        var startOffset = Math.ceil((parent.width / 2) / spacingSizeWithDivision) * spacingSizeWithDivision
+
+        if (newPadding > startOffset) {
+            if ((newPadding - startOffset) < spacingSizeWithDivision)
+                divisions.anchors.leftMargin = -newPadding
+            else {
+                divisions.anchors.leftMargin = -((newPadding % spacingSizeWithDivision) + startOffset)
+                divisionLines.bigDivisionOffset = (divisionLines.bigDivisionOffset + 1) % bigDivisionsPos
+            }
+        }
+        else
+            divisions.anchors.leftMargin = - newPadding
     }
 
     function reset() {
-        divisions.offset = 0
+        divisionLines.bigDivisionOffset = 0
+        animateDivisions.start()
     }
 }
