@@ -2,8 +2,12 @@ import QtQuick
 import QtMultimedia
 
 Rectangle {
+    id: timerField
+    property color mainColor
+
     border.color: mainColor
     border.width: 2
+
     property alias running: counter.running
     property alias phaseLabelText: phaseLabel.phaseLabelText
 
@@ -12,7 +16,6 @@ Rectangle {
     property int currentPhase: PomodoroCycle.Phase.Focus
 
     signal timeOver()
-
     signal tick()
 
     PhaseLabel {
@@ -23,6 +26,8 @@ Rectangle {
         anchors.bottom: time.top
         anchors.margins: 5
         anchors.bottomMargin: -20
+
+        mainColor: timerField.mainColor
     }
     onFocusCountChanged: phaseLabel.fillCycles(focusCount+1)
 
@@ -34,7 +39,9 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottomMargin: 8
 
-        property int secondsLeft: updateTimeLabel()
+        text: formatTime(secondsLeft)
+        property int secondsLeft
+
         function formatTime(seconds) {
             var mins = Math.floor(seconds / 60)
             var secs = seconds % 60
@@ -42,11 +49,10 @@ Rectangle {
             return mins.toString().padStart(2, "0") + ":" +
                     secs.toString().padStart(2, "0")
         }
-        text: formatTime(secondsLeft)
     }
 
     MediaPlayer {
-        id: bell
+        id: finishSound
         audioOutput: AudioOutput {}
         source: "qrc:/sounds/resources/ring.mp3"
     }
@@ -60,6 +66,7 @@ Rectangle {
     Timer {
         id: counter
         repeat: true
+
         onTriggered: {
             tick()
             time.secondsLeft = time.secondsLeft - 1
@@ -70,7 +77,7 @@ Rectangle {
                 updateTimeLabel()
                 return
             }
-            else if (time.secondsLeft == 3) {bell.play()}
+            else if (time.secondsLeft === 3) {finishSound.play()}
         }
     }
 
@@ -90,7 +97,7 @@ Rectangle {
 
     function stop() {
         counter.running = false
-        bell.stop()
+        finishSound.stop()
         startSound.stop()
         updateTimeLabel()
         phaseLabel.hideCycles()

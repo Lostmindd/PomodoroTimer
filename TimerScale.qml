@@ -11,6 +11,7 @@ Rectangle  {
     readonly property int stepsBetweenDivisions: 1
 
     property int minutes: 0
+    property color mainColor
 
     component HorizontalLine : Rectangle {
         width: parent.width
@@ -70,7 +71,7 @@ Rectangle  {
             property int offset: 0
 
             function calculateLeftMargin() {
-                var spacingSizeWithDivision = divisionLines.spacingSize + lineThickness
+                const spacingSizeWithDivision = divisionLines.spacingSize + lineThickness
                 return (minutes * spacingSizeWithDivision) - offset
             }
         }
@@ -118,7 +119,7 @@ Rectangle  {
     function nextStep() {
         const  spacingSizeWithDivision = divisionLines.spacingSize + lineThickness
         const  stepSize = spacingSizeWithDivision / stepsBetweenDivisions
-        const  newPadding = (Math.abs(divisions.anchors.leftMargin) + stepSize)
+        const  newPadding = Math.abs(divisions.anchors.leftMargin) + stepSize
         const  startOffset = Math.ceil((parent.width / 2) / spacingSizeWithDivision) * spacingSizeWithDivision
 
         if (newPadding > startOffset) {

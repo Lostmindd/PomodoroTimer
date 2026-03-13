@@ -19,10 +19,9 @@ Window {
 
     TimerScale {
         id: scale
-
         height: 40
-        // anchors.left: parent.left
-        // anchors.bottom: parent.top
+
+        mainColor: window.mainColor
     }
 
     Rectangle {
@@ -38,20 +37,25 @@ Window {
             width: parent.width
             spacing: 40
 
-            TimeSelector {
+            component PomodoroTimeSelector : TimeSelector {
+                mainColor: window.mainColor
+                secondColor: window.secondColor
+            }
+
+            PomodoroTimeSelector {
                 id: focus
                 text: qsTr("Focus")
-                currentValue: 3 //25
+                currentValue: 25
             }
-            TimeSelector {
+            PomodoroTimeSelector {
                 id: shortBreak
                 text: qsTr("Short Break")
-                currentValue: 1//5
+                currentValue: 5
             }
-            TimeSelector {
+            PomodoroTimeSelector {
                 id: longBreak
                 text: qsTr("Long Break")
-                currentValue: 4//15
+                currentValue: 15
             }
         }
 
@@ -67,6 +71,17 @@ Window {
         id: pomodoroCycle
     }
 
+    function phaseMinutes(phase) {
+        switch (phase) {
+        case PomodoroCycle.Phase.Focus:
+            return focus.currentValue
+        case PomodoroCycle.Phase.ShortBreak:
+            return shortBreak.currentValue
+        case PomodoroCycle.Phase.LongBreak:
+            return longBreak.currentValue
+        }
+    }
+
     Button {
         id: startButton
 
@@ -75,13 +90,15 @@ Window {
         anchors.horizontalCenter: parent.horizontalCenter
         width: 120
         height: 40
+
         text: timer.running? qsTr("stop") : qsTr("start")
+
         background: Rectangle {
             color: parent.down ? secondColor : mainColor
         }
-
         palette.buttonText: "white"
         font.pointSize: 22
+
         contentItem.anchors.verticalCenter: verticalCenter
         contentItem.anchors.verticalCenterOffset: -2
 
@@ -91,9 +108,9 @@ Window {
                 timer.stop()
                 scale.reset()
             }
-            else{
-                timer.start(pomodoroCycle.currentMinutes())
-                scale.minutes = pomodoroCycle.currentMinutes() //* 60
+            else {
+                timer.start(phaseMinutes(pomodoroCycle.currentPhase))
+                scale.minutes = phaseMinutes(pomodoroCycle.currentPhase)
                 scale.reset()
             }
         }
@@ -107,17 +124,18 @@ Window {
         anchors.top: startButton.bottom
         anchors.horizontalCenter: parent.horizontalCenter
 
+        mainColor: window.mainColor
+
+        maxMinutes: phaseMinutes(pomodoroCycle.currentPhase)
+        currentPhase: pomodoroCycle.currentPhase
+        phaseLabelText: pomodoroCycle.phaseAsText(pomodoroCycle.currentPhase)
+        focusCount: pomodoroCycle.focusCount
+
         onTimeOver: {
             visibility = Window.Windowed
             pomodoroCycle.nextStep()
         }
-        maxMinutes: pomodoroCycle.currentMinutes()
-
         onTick: scale.nextStep()
-
-        currentPhase: pomodoroCycle.currentPhase
-        phaseLabelText: pomodoroCycle.phaseAsText(pomodoroCycle.currentPhase)
-        focusCount: pomodoroCycle.focusCount
 
         Connections {
             target: focus

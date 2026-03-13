@@ -5,8 +5,15 @@ Item  {
     id: timeSelector
     height: 40
     width: parent.width
+
+    readonly property int min: 1
+    readonly property int max: 240
+
     property alias text: label.text
-    property alias currentValue: spin.value
+    property alias currentValue: spinner.value
+
+    property color mainColor
+    property color secondColor
 
     Text {
         id: label
@@ -16,26 +23,28 @@ Item  {
     }
 
     SpinBox {
-        id: spin
+        id: spinner
         anchors.right: timeSelector.right
+
         implicitWidth: 160
 
-        from: 1
-        to: 240
+        from: timeSelector.min
+        to: timeSelector.max
         editable: true
         font.pointSize: 14
-        property string suffix: " m"
 
-        textFromValue: value => spin.activeFocus? value : value + suffix
+        readonly property string suffix: " m"
+
+        textFromValue: value => spinner.activeFocus? value : value + suffix
         valueFromText: value => parseInt(value)
 
         // textFromValue is not called without changing the value to a new one
         onActiveFocusChanged: {
             if (activeFocus)
             {
-                const val = spin.value
-                spin.value = -1
-                spin.value = val
+                const val = spinner.value
+                spinner.value = -1
+                spinner.value = val
             }
         }
 
@@ -55,13 +64,13 @@ Item  {
 
         down.indicator: IndicatorButton {
             text: "-"
-            color: spin.down.pressed ? secondColor : mainColor
+            color: spinner.down.pressed ? secondColor : mainColor
         }
 
         up.indicator: IndicatorButton {
             text: "+"
             anchors.right: parent.right
-            color: spin.up.pressed ? secondColor : mainColor
+            color: spinner.up.pressed ? secondColor : mainColor
         }
 
         background: Rectangle {

@@ -29,17 +29,6 @@ QtObject {
         }
     }
 
-    function currentMinutes() {
-        switch (currentPhase) {
-        case PomodoroCycle.Phase.Focus:
-            return focus.currentValue
-        case PomodoroCycle.Phase.ShortBreak:
-            return shortBreak.currentValue
-        case PomodoroCycle.Phase.LongBreak:
-            return longBreak.currentValue
-        }
-    }
-
     function phaseAsText(phase){
         switch (phase) {
         case PomodoroCycle.Phase.Focus:

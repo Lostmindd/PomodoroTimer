@@ -2,6 +2,7 @@ import QtQuick
 
 Rectangle {
     property alias phaseLabelText: phaseLabel.text
+    property color mainColor
 
     Text {
         id: phaseLabel
@@ -9,14 +10,6 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         color: mainColor
         font.pointSize: 14
-    }
-
-    function fillCycles (count) {
-       if (count > 4 || count < 0)
-           return
-
-       completeRepeater.model = count
-       emptyRepeater.model = 4 - count
     }
 
     Row {
@@ -43,6 +36,14 @@ Rectangle {
             }
         }
         visible: false
+    }
+
+    function fillCycles (count) {
+       if (count > 4 || count < 0)
+           return
+
+       completeRepeater.model = count
+       emptyRepeater.model = 4 - count
     }
 
     function showCycles() {
