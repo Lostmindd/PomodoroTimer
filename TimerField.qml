@@ -40,7 +40,7 @@ Rectangle {
         anchors.bottomMargin: 8
 
         text: formatTime(secondsLeft)
-        property int secondsLeft
+        property int secondsLeft: 25 * 60
 
         function formatTime(seconds) {
             var mins = Math.floor(seconds / 60)
